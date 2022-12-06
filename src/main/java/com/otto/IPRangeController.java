@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
-//@RequestParam("region") String region
-
 @RestController
 public class IPRangeController {
 	
