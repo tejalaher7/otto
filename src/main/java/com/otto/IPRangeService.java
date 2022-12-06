@@ -58,13 +58,12 @@ public class IPRangeService {
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
                 
-                List<JsonNode> prefixNodes = new ArrayList<>();
-
              // Read the JSON into the Jackson tree model and get the "paths" node
              JsonNode tree = mapper.readTree(inline);
              JsonNode prefixes = tree.get("prefixes");            
              if (prefixes.isArray()) {
                  ArrayNode arrayNode = (ArrayNode) prefixes;
+                 
                  for (int i = 0; i < arrayNode.size(); i++) 
                  {
                      JsonNode individualElement = arrayNode.get(i);                    
@@ -79,9 +78,6 @@ public class IPRangeService {
                  }
                 
             }
-                
-               
-                
             }
     	}
             catch (Exception e) 
