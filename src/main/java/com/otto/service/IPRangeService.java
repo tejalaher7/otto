@@ -1,4 +1,4 @@
-package com.otto;
+package com.otto.service;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
