@@ -36,14 +36,12 @@
     <dependency>
     <groupId>com.googlecode.json-simple</groupId>
     <artifactId>json-simple</artifactId>
-    <version>1.1</version>
-	</dependency>
+    </dependency>
 	
 	<dependency>
     <groupId>com.jayway.jsonpath</groupId>
     <artifactId>json-path</artifactId>
-    <version>1.2.0</version>
-</dependency>
+    </dependency>
 	
 	
 	<dependency>
@@ -68,6 +66,25 @@
                     <fork>true</fork>
                     <executable>C:\Program Files\Java\jdk-17.0.4.1\bin\javac</executable>
                 </configuration>
+            </plugin>
+            <plugin>
+              <groupId>com.google.cloud.tools</groupId>
+              <artifactId>jib-maven-plugin</artifactId>
+              <version>2.7.1</version>
+              <configuration>
+                <to>
+                  <image>registry.hub.docker.com/tejalaher7/tejal_ipranges_otto</image>
+                  <auth>
+                  		<username>tejalaher7</username>
+                  		<password>Tejal@123</password>
+                  </auth>
+                </to>
+                <container>
+                  <ports>
+                    <port>8080</port>
+                  </ports>
+                </container>
+              </configuration>
             </plugin>
 		</plugins>
 		<finalName>tejal_ipranges_otto</finalName>

@@ -1,11 +1,17 @@
 package com.otto.service;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.naming.spi.DirStateFactory.Result;
+
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -17,19 +23,101 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 public class IPRangeService {
 	
 	private String awsIPRangeURL = "https://ip-ranges.amazonaws.com/ip-ranges.json";
-	private List<String> validRegions=  Arrays.asList("EU", "US", "AP", "CN", "SA", "AF", "CA");
+	private List<String> validRegions=  Arrays.asList("US", "AP", "CN", "SA", "AF", "CA", "EU", "ALL");
 	
 	
 
-	public String getIPRanges(String region) {
+public String getIPRanges(String region) {
 		
 		String inline = "";
-		StringBuilder result = new StringBuilder();
+		String result = null;
 		
 		
 		if(validRegions.contains(region))
 		{
-			try{
+			inline=getAWS_IPRanges(inline);
+			
+			JsonNode prefixes = retrieveJSONTag(inline);
+             
+			if(region.equals("ALL"))
+			{
+				result=getAll_IpRanges(prefixes);
+			}
+                         
+			else
+			{
+				 result=getIpRanges_region(region,prefixes);
+			}
+                     
+		 }          
+
+		else
+			return "Sorry the Region is invalid. Please enter a valid Region.";  
+             
+               
+		return result;
+	
+	}			
+
+private String getAll_IpRanges(JsonNode prefixes) {
+	StringBuilder result = new StringBuilder();
+	 if (prefixes.isArray()) {		
+         ArrayNode arrayNode = (ArrayNode) prefixes;
+         
+         for (int i = 0; i < arrayNode.size(); i++) 
+         {
+             JsonNode individualElement = arrayNode.get(i);
+             	result.append(individualElement);
+             	result.append("<br>"); 
+             	
+         }
+
+	 	}
+	 return result.toString();
+}
+
+private String getIpRanges_region(String region, JsonNode prefixes) {
+	ArrayNode arrayNode = (ArrayNode) prefixes;
+	StringBuilder result = new StringBuilder();
+    for (int i = 0; i < arrayNode.size(); i++) 
+    {
+    	
+        JsonNode individualElement = arrayNode.get(i);
+        if(individualElement.get("region").toString().startsWith("\"" + region.toLowerCase()))
+        {
+        	result.append(individualElement);
+        	result.append("<br>"); 
+        }	
+    }
+	return result.toString();
+}
+	
+
+
+private JsonNode retrieveJSONTag(String inline) {
+		ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+           
+        // Read the JSON into the Jackson tree model and get the "paths" node
+        JsonNode tree = null;
+		try {
+			tree = mapper.readTree(inline);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        JsonNode prefixes = tree.get("prefixes");
+		return prefixes;
+	}
+
+
+
+
+private String getAWS_IPRanges(String inline) {
+		try{
 			URL url = new URL(awsIPRangeURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -49,46 +137,16 @@ public class IPRangeService {
                     inline += scanner.nextLine();
                 }
                 scanner.close();
-                
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.enable(SerializationFeature.INDENT_OUTPUT);
-                
-             // Read the JSON into the Jackson tree model and get the "paths" node
-             JsonNode tree = mapper.readTree(inline);
-             JsonNode prefixes = tree.get("prefixes");            
-             if (prefixes.isArray()) {
-                 ArrayNode arrayNode = (ArrayNode) prefixes;
-                 
-                 for (int i = 0; i < arrayNode.size(); i++) 
-                 {
-                     JsonNode individualElement = arrayNode.get(i);                    
-                     if (individualElement.get("region").toString().startsWith("\"" + region.toLowerCase()))
-                     {
-                    	result.append(individualElement);
-                    	result.append("<br>"); 
-                    	 
-                     }
-             
-             
-                 }
-                
             }
-            }
-    	}
-            catch (Exception e) 
+           
+		}catch (Exception e) 
     		{
             e.printStackTrace();
     		}
-		return result.toString();
-		}
-		
-		else
-			return null;
-		
-		
+		return inline;
 	}
 
 
-	}
+}
 
 
