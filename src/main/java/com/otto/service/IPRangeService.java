@@ -1,21 +1,16 @@
 package com.otto.service;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.type.TypeFactory;
+
 
 
 @Service
@@ -35,7 +30,7 @@ public class IPRangeService {
 		if(validRegions.contains(region))
 		{
 			try{
-			URL url = new URL("https://ip-ranges.amazonaws.com/ip-ranges.json");
+			URL url = new URL(awsIPRangeURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.connect();
