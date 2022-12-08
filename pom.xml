@@ -57,35 +57,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <fork>true</fork>
-                    <executable>C:\Program Files\Java\jdk-17.0.4.1\bin\javac</executable>
-                </configuration>
-            </plugin>
-            <plugin>
-              <groupId>com.google.cloud.tools</groupId>
-              <artifactId>jib-maven-plugin</artifactId>
-              <version>2.7.1</version>
-              <configuration>
-                <to>
-                  <image>registry.hub.docker.com/tejalaher7/tejal_ipranges_otto</image>
-                  <auth>
-                  		<username>tejalaher7</username>
-                  		<password>Tejal@123</password>
-                  </auth>
-                </to>
-                <container>
-                  <ports>
-                    <port>8080</port>
-                  </ports>
-                </container>
-              </configuration>
-            </plugin>
 		</plugins>
 		<finalName>tejal_ipranges_otto</finalName>
 	</build>
