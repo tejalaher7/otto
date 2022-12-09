@@ -26,16 +26,16 @@ public class IPRangeService {
 	private List<String> validRegions=  Arrays.asList("US", "AP", "CN", "SA", "AF", "CA", "EU", "ALL");
 	
 	
-
+//Method to get IP Ranges
 public String getIPRanges(String region) {
 		
-		String inline = "";
+		
 		String result = null;
 		
 		
 		if(validRegions.contains(region))
 		{
-			inline=getAWS_IPRanges(inline);
+			String inline=getAWS_IPRanges(awsIPRangeURL);
 			
 			JsonNode prefixes = retrieveJSONTag(inline);
              
@@ -59,6 +59,8 @@ public String getIPRanges(String region) {
 	
 	}			
 
+//Method returns ALL the available IPRanges
+
 private String getAll_IpRanges(JsonNode prefixes) {
 	StringBuilder result = new StringBuilder();
 	 if (prefixes.isArray()) {		
@@ -76,6 +78,7 @@ private String getAll_IpRanges(JsonNode prefixes) {
 	 return result.toString();
 }
 
+//Method returns IP Ranges as per the region passed in the URL query parameter
 private String getIpRanges_region(String region, JsonNode prefixes) {
 	ArrayNode arrayNode = (ArrayNode) prefixes;
 	StringBuilder result = new StringBuilder();
@@ -93,6 +96,7 @@ private String getIpRanges_region(String region, JsonNode prefixes) {
 }
 	
 
+//Method returns data of a JSON tag after parsing the input JSON String
 
 private JsonNode retrieveJSONTag(String inline) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -116,7 +120,8 @@ private JsonNode retrieveJSONTag(String inline) {
 
 
 
-private String getAWS_IPRanges(String inline) {
+private String getAWS_IPRanges(String awsIPRangeURL) {
+		String inline ="";
 		try{
 			URL url = new URL(awsIPRangeURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
