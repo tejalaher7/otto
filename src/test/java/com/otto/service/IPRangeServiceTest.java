@@ -11,10 +11,12 @@ import javax.ws.rs.core.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
@@ -28,7 +30,7 @@ import com.fasterxml.jackson.databind.JsonNode;
   webEnvironment = SpringBootTest.WebEnvironment.MOCK,
   classes = Application.class)
 @AutoConfigureMockMvc
-
+@Profile("conditionalTest")
 public class IPRangeServiceTest {
 	
 	
