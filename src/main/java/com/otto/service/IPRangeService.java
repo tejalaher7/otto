@@ -105,7 +105,7 @@ public JsonNode retrieveJSONTag(String inline) {
 		ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
            
-        // Read the JSON into the Jackson tree model and get the "paths" node
+        // Read the JSON into the Jackson tree model and get the "prefixes" node
         JsonNode tree = null;
 		try {
 			tree = mapper.readTree(inline);
@@ -121,7 +121,7 @@ public JsonNode retrieveJSONTag(String inline) {
 	}
 
 
-//Method to get the respose after hitting the AWS Ip Range Url
+//Method to get the response after hitting the AWS IP Range Url
 
 public String getAWS_IPRanges(String awsIPRangeURL) {
 		String inline ="";
