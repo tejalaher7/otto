@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import javax.naming.spi.DirStateFactory.Result;
 
@@ -31,9 +32,11 @@ public String getIPRanges(String region) {
 		
 		
 		String result = null;
+		List<String> validRegions_lowercase = validRegions.stream()
+				  .map(String::toLowerCase)
+				  .collect(Collectors.toList());
 		
-		
-		if(validRegions.contains(region))
+		if(validRegions.contains(region)|| validRegions_lowercase.contains(region))
 		{
 			String inline=getAWS_IPRanges(awsIPRangeURL);
 			
@@ -61,7 +64,7 @@ public String getIPRanges(String region) {
 
 //Method returns ALL the available IPRanges
 
-private String getAll_IpRanges(JsonNode prefixes) {
+public String getAll_IpRanges(JsonNode prefixes) {
 	StringBuilder result = new StringBuilder();
 	 if (prefixes.isArray()) {		
          ArrayNode arrayNode = (ArrayNode) prefixes;
@@ -79,7 +82,7 @@ private String getAll_IpRanges(JsonNode prefixes) {
 }
 
 //Method returns IP Ranges as per the region passed in the URL query parameter
-private String getIpRanges_region(String region, JsonNode prefixes) {
+public String getIpRanges_region(String region, JsonNode prefixes) {
 	ArrayNode arrayNode = (ArrayNode) prefixes;
 	StringBuilder result = new StringBuilder();
     for (int i = 0; i < arrayNode.size(); i++) 
@@ -90,7 +93,7 @@ private String getIpRanges_region(String region, JsonNode prefixes) {
         {
         	result.append(individualElement);
         	result.append("<br>"); 
-        }	
+        }
     }
 	return result.toString();
 }
@@ -98,7 +101,7 @@ private String getIpRanges_region(String region, JsonNode prefixes) {
 
 //Method returns data of a JSON tag after parsing the input JSON String
 
-private JsonNode retrieveJSONTag(String inline) {
+public JsonNode retrieveJSONTag(String inline) {
 		ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
            
@@ -118,9 +121,9 @@ private JsonNode retrieveJSONTag(String inline) {
 	}
 
 
+//Method to get the respose after hitting the AWS Ip Range Url
 
-
-private String getAWS_IPRanges(String awsIPRangeURL) {
+public String getAWS_IPRanges(String awsIPRangeURL) {
 		String inline ="";
 		try{
 			URL url = new URL(awsIPRangeURL);
