@@ -49,7 +49,13 @@
 	<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+    </dependency>
+    
+    <dependency>
+    <groupId>javax.xml.bind</groupId>
+    <artifactId>jaxb-api</artifactId>
+    <version>2.3.1</version>
+	</dependency>
 		
 </dependencies>  
 
@@ -76,7 +82,7 @@
                 <to>
                   <image>registry.hub.docker.com/tejalaher7/tejal_ipranges_otto_jib</image>
                   <auth>
-                  		<username>tejalaher7</username>
+                		<username>tejalaher7</username>
                   		<password>Tejal@123</password>
                   </auth>
                 </to>
