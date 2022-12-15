@@ -1,21 +1,18 @@
 package com.otto.service;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import javax.naming.spi.DirStateFactory.Result;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 
@@ -25,6 +22,12 @@ public class IPRangeService {
 	
 	private String awsIPRangeURL = "https://ip-ranges.amazonaws.com/ip-ranges.json";
 	private List<String> validRegions=  Arrays.asList("US", "AP", "CN", "SA", "AF", "CA", "EU", "ALL");
+	
+	@Autowired
+	RestTemplate restTemplate;
+	
+	@Autowired
+	ObjectMapper mapper;
 	
 	
 //Method to get IP Ranges
@@ -38,9 +41,7 @@ public String getIPRanges(String region) {
 		
 		if(validRegions.contains(region)|| validRegions_lowercase.contains(region))
 		{
-			String inline=getAWS_IPRanges(awsIPRangeURL);
-			
-			JsonNode prefixes = retrieveJSONTag(inline);
+			JsonNode prefixes = getAWS_IPRanges(awsIPRangeURL);
              
 			if(region.equals("ALL"))
 			{
@@ -101,7 +102,7 @@ public String getIpRanges_region(String region, JsonNode prefixes) {
 
 //Method returns data of a JSON tag after parsing the input JSON String
 
-public JsonNode retrieveJSONTag(String inline) {
+/*public JsonNode retrieveJSONTag(String inline) {
 		ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
            
@@ -118,40 +119,31 @@ public JsonNode retrieveJSONTag(String inline) {
 		}
         JsonNode prefixes = tree.get("prefixes");
 		return prefixes;
-	}
+	}*/
 
 
 //Method to get the response after hitting the AWS IP Range Url
 
-public String getAWS_IPRanges(String awsIPRangeURL) {
-		String inline ="";
-		try{
-			URL url = new URL(awsIPRangeURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.connect();
-            int responsecode = conn.getResponseCode();
-            
-
-            if (responsecode != 200) {
-                throw new RuntimeException("HttpResponseCode: " + responsecode);
-            } 
-            
-            else {
-
-                Scanner scanner = new Scanner(url.openStream());
-                //Write all the JSON data into a string using a scanner
-                while (scanner.hasNext()) {
-                    inline += scanner.nextLine();
-                }
-                scanner.close();
-            }
-           
-		}catch (Exception e) 
-    		{
-            e.printStackTrace();
-    		}
-		return inline;
+public JsonNode getAWS_IPRanges(String awsIPRangeURL) {
+		String  response = restTemplate.getForObject(awsIPRangeURL, String.class);
+	    JsonNode prefixes = null;
+	     
+		try {
+			
+			JsonNode rootNode = mapper.readValue(response, JsonNode.class);
+			prefixes= rootNode.get("prefixes");
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	     
+		return prefixes;
 	}
 
 
