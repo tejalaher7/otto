@@ -51,7 +51,7 @@ public class IPRangeServiceTest {
 	public void setup()
 	{
 		
-		MockitoAnnotations.initMocks(IPRangeServiceTest.class);
+		//MockitoAnnotations.initMocks(IPRangeServiceTest.class);
 		try {
 			Mockito.when(mapper.readValue(Mockito.anyString(), Mockito.any(Class.class))).thenReturn(rootNode);
 			Mockito.when(rootNode.get("prefixes")).thenReturn(Prefixes.prefixes);

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: k8s_ipranges_deployment
+
+  labels:
+
+    app: otto_ipranges
+
+spec:
+
+  replicas: 1
+
+  selector:
+
+    matchLabels:
+
+      app: otto_ipranges
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: otto_ipranges
+
+    spec:
+
+      containers:
+
+      - name: otto_ipranges
+
+        image: tejalaher7/tejal_ipranges_otto_jib
+
+        ports:
+
+        - containerPort: 8080

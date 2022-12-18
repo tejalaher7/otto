@@ -133,13 +133,13 @@ public JsonNode getAWS_IPRanges(String awsIPRangeURL) {
 			JsonNode rootNode = mapper.readValue(response, JsonNode.class);
 			prefixes= rootNode.get("prefixes");
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	     
