@@ -1,4 +1,4 @@
-# tejal_ipranges_otto
+# tejal_ipranges
 
 Viewing all the IP Ranges for selected region from AWS IP ranges
 
